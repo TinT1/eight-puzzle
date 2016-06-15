@@ -39,7 +39,7 @@ public class SolveBacktrack {
 				}
 				SL.add(CS);
 			} else {
-				
+				// palce children of CS on NSL
 				CS = NSL.get(0);
 				SL.add(CS);
 			}
