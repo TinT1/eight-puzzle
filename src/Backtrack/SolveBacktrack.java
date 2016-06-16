@@ -13,7 +13,11 @@ public class SolveBacktrack {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		board.printBoard();
-		setNSL(board.getPositions());
+		List<int []> finish = new ArrayList<int []>();
+		finish = backtrack();
+		for(int i=0 ;i <finish.size(); i++){
+			printBoard(finish.get(i));
+		}
 	}
 	
 	
@@ -21,24 +25,30 @@ public class SolveBacktrack {
 		SL.add(board.getPositions());
 		NSL.add(board.getPositions());
 		CS = board.getPositions();
+		for(int i=0 ;i <SL.size(); i++){
+			printBoard(SL.get(i));
+		}
 		while (!NSL.isEmpty()){
 			if (CS.equals(goalBoard)){
 				return SL;
 			}
-			if(hasUniqueChild()){
-				while (!SL.isEmpty() && CS == SL.get(0)){
+			if(!hasUniqueChild()){
+				while (!SL.isEmpty() && CS.equals(SL.get(0))){
 					DE.add(CS);
 					SL.remove(0);
 					NSL.remove(0);
-					CS = NSL.get(0);
+					CS = copyArray(NSL.get(0));
+					
 				}
+				
 				SL.add(CS);
 			} else {
+				setNSL(CS);
 				CS = NSL.get(0);
 				SL.add(CS);
 			}
 		}
-		return null;
+		return SL;
 	}
 	
 	public static List<int[]> setNSL(int[] examineBoard){
@@ -46,7 +56,6 @@ public class SolveBacktrack {
 		int [] newPos = new int[9];
 		for (int i = 0; i < examineBoard.length; ++i){
 			if (0 == examineBoard[i]){
-				System.out.println(i);
 				if(i-3 > 0){
 					newPositions.add(changePlaces(examineBoard, newPos, i, 3, '-'));
 				}
@@ -64,7 +73,7 @@ public class SolveBacktrack {
 			
 		}
 		for(int i=0 ;i <newPositions.size(); i++){
-			System.out.println(newPositions.get(i));
+			//printBoard(newPositions.get(i));
 		}
 		return newPositions;
 	}
@@ -104,7 +113,7 @@ public class SolveBacktrack {
 	public static Boolean hasUniqueChild(){
 		
 		List<int []> listCHildren = new ArrayList<int []>();
-		listCHildren = setNSL(CS);//mozda treba kopirati
+		listCHildren = setNSL(CS);
 		if(listCHildren.isEmpty())return false;
 		for (int i = 0; i < listCHildren.size(); i++ ){
 			if(NSL.contains(listCHildren.get(i)) || SL.contains(listCHildren.get(i))
