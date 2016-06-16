@@ -68,7 +68,7 @@ public class SolveBacktrack {
 			}
 		}
 		for (int i = 0; i < newPositions.size();i++)
-		System.out.println(newPositions.get(i));
+		printBoard(newPositions.get(i));
 		
 	}
 	public static void printBoard(int [] arrayT)
