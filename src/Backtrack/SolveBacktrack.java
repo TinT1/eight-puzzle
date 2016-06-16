@@ -1,10 +1,8 @@
 package Backtrack;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import Game.Board;
-
 public class SolveBacktrack {
 	
 	List<int []> SL = new ArrayList<int []>();
@@ -69,7 +67,8 @@ public class SolveBacktrack {
 				
 			}
 		}
-		
+		for (int i = 0; i < newPositions.size();i++)
+		System.out.println(newPositions.get(i));
 		
 	}
 	public static void printBoard(int [] arrayT)
