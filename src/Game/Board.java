@@ -9,7 +9,6 @@ public class Board {
 		this.n = n;
 		this.positions = new int [n];
 		System.arraycopy(positions, 0, this.positions, 0, positions.length);
-		this.positions[8] = 0;
 	}
 	public int getN(){
 		return n;
@@ -27,5 +26,6 @@ public class Board {
 			str += this.positions[i] + " ";
 			if((i+1)%3 == 0 && i != 0) {System.out.println(str);str ="";}
 		}
+		System.out.println("\n");
 	}
 }
