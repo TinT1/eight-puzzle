@@ -1,36 +1,36 @@
 package Backtrack;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 
 import Game.Board;
 
 public class SolveBacktrack {
-	
-	List<int []> SL = new ArrayList<int []>();
-	List<int []> NSL = new ArrayList<int []>();
-	List<int []> DE = new ArrayList<int []>();
-	int [] CS = new int [9];
+	public static List<int []> SL = new ArrayList<int []>();
+	public static List<int []> NSL = new ArrayList<int []>();
+	public static List<int []> DE = new ArrayList<int []>();
+	public static int [] CS = new int [9];
 	static Board board = new Board(9, new int [] {2, 4, 0, 8, 1, 3, 6, 5, 7});
-	Board goalBoard = new Board(9, new int [] {1, 2, 3, 4, 5, 6, 7, 8, 0});
-	
+	public static Board goalBoard = new Board(9, new int [] {1, 2, 3, 4, 5, 6, 7, 8, 0});
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		board.printBoard();
-		setNSL(board);
+		setNSL(board.getPositions());
 	}
 	
 	
-	public List<int []> backtrack(){
+	public static List<int []> backtrack(){
 		SL.add(board.getPositions());
 		NSL.add(board.getPositions());
 		CS = board.getPositions();
-		
 		while (!NSL.isEmpty()){
 			if (CS.equals(goalBoard)){
 				return SL;
 			}
-			if(true){//if CS has no children
+			if(hasUniqueChild()){
 				while (!SL.isEmpty() && CS == SL.get(0)){
 					DE.add(CS);
 					SL.remove(0);
@@ -39,7 +39,6 @@ public class SolveBacktrack {
 				}
 				SL.add(CS);
 			} else {
-				// palce children of CS on NSL
 				CS = NSL.get(0);
 				SL.add(CS);
 			}
@@ -47,30 +46,32 @@ public class SolveBacktrack {
 		return null;
 	}
 	
-	public static void setNSL(Board examineBoard){
+	public static List<int[]> setNSL(int[] examineBoard){
 		List <int []> newPositions = new ArrayList<int []>();
 		int [] newPos = new int[9];
-		int tmp;
-		for (int i = 0; i < examineBoard.getN(); ++i){
-			if (0 == examineBoard.getPositions()[i]){
+		for (int i = 0; i < examineBoard.length; ++i){
+			if (0 == examineBoard[i]){
 				System.out.println(i);
 				if(i-3 > 0){
-					newPositions.add(ChangePlaces(examineBoard, newPos, i, 3, '-'));
+					newPositions.add(changePlaces(examineBoard, newPos, i, 3, '-'));
 				}
-				if(i+3 < examineBoard.getN()){
-					newPositions.add(ChangePlaces(examineBoard, newPos, i, 3, '+'));
+				if(i+3 < examineBoard.length){
+					newPositions.add(changePlaces(examineBoard, newPos, i, 3, '+'));
 				}
-				if(i+1 < examineBoard.getN() && i != 2 && i != 5 && i != 8){
-					newPositions.add(ChangePlaces(examineBoard, newPos, i, 1, '+'));
+				if(i+1 < examineBoard.length && i != 2 && i != 5 && i != 8){
+					newPositions.add(changePlaces(examineBoard, newPos, i, 1, '+'));
 				}
 				if(i-1 > 0 && i%3!=0){
-					newPositions.add(ChangePlaces(examineBoard, newPos, i, 1, '-'));
+					newPositions.add(changePlaces(examineBoard, newPos, i, 1, '-'));
 				}
 				
 			}
+			
 		}
-		
-		
+		for(int i=0 ;i <newPositions.size(); i++){
+			System.out.println(newPositions.get(i));
+		}
+		return newPositions;
 	}
 	public static void printBoard(int [] arrayT)
 	{
@@ -90,11 +91,10 @@ public class SolveBacktrack {
 		}
 		return arrayC;
 	}
-	
-	public static int [] ChangePlaces(Board examineBoard, int [] newPos,int i, int numToChange, char posNeg){
+	public static int [] changePlaces(int[] examineBoard, int [] newPos,int i, int numToChange, char posNeg){
 		
 		int tmp;
-		System.arraycopy( examineBoard.getPositions(), 0, newPos, 0, examineBoard.getN() );
+		System.arraycopy( examineBoard, 0, newPos, 0, examineBoard.length );
 		if(posNeg == '-'){
 			tmp = newPos[i-numToChange];
 			newPos[i-numToChange] = 0;
@@ -106,4 +106,18 @@ public class SolveBacktrack {
 		newPos[i] = tmp;
 		return copyArray(newPos);
 	}
+	public static Boolean hasUniqueChild(){
+		
+		List<int []> listCHildren = new ArrayList<int []>();
+		listCHildren = setNSL(CS);//mozda treba kopirati
+		if(listCHildren.isEmpty())return false;
+		for (int i = 0; i < listCHildren.size(); i++ ){
+			if(NSL.contains(listCHildren.get(i)) || SL.contains(listCHildren.get(i))
+			    || DE.contains(listCHildren.get(i))){
+				return false;
+			}
+		}
+		return true;
+	}
 }
+
