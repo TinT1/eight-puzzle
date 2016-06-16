@@ -1,11 +1,6 @@
 package Backtrack;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
-
 import Game.Board;
 
 public class SolveBacktrack {
